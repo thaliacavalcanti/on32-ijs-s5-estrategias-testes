@@ -84,4 +84,25 @@ describe('Create User', () => {
         expect(mySpyOn).toHaveBeenCalledTimes(1);
       });
   });
+
+  test('Deve excluir um usuário com sucess SEM endereço', async () => {
+    const name = 'Lais';
+    const email = 'lais.frigerio@gmail.com';
+    const password = 'T3st@123!';
+    const cpf = '169.594.590-52';
+
+    await supertest(app.getHttpServer())
+      .post('/users')
+      .send({
+        name,
+        email,
+        password,
+        cpf,
+      })
+      .expect(201);
+
+      await supertest(app.getHttpServer()).delete(`/users/1`).expect(200);
+
+      return supertest(app.getHttpServer()).get(`/users/1`).expect(404)
+  });
 });
